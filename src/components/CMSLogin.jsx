@@ -3,7 +3,6 @@ import { LogIn, Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { auth, signInWithEmailAndPassword } from "./firebase"; 
 
-import "../styles/login.css";
 import "../styles/Login.css";
 import "../styles/Sidebar.css";
 
