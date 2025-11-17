@@ -1,0 +1,145 @@
+/* -------------------------------------------------------------------
+ * Top Panel Styles (Using Global Theme Variables)
+ * ------------------------------------------------------------------- */
+
+.top-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 97%;
+  max-width: 98%; 
+  padding: 1rem 1.5rem;
+  
+  /* Theme Variables for Glass Panel Look */
+  background: var(--color-panel-bg); 
+  backdrop-filter: blur(15px);
+  border-radius: 24px;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--color-shadow-primary);
+  color: var(--color-text-primary);
+  
+  transition: all 0.3s ease;
+  overflow: hidden; 
+}
+
+/* Right controls auto-fit */
+.right-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  max-width: 50%; 
+  flex-shrink: 1;
+  overflow: hidden;
+  justify-content: flex-end;
+}
+
+/* --- Search Box (Theme Compatible) --- */
+.search-box {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  max-width: 600px;
+  position: relative;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 0.75rem 1.5rem 0.75rem 2.5rem;
+  border-radius: 9999px;
+  
+  /* Input background is slightly darker/more opaque version of panel background */
+  background-color: color-mix(in srgb, var(--color-panel-bg) 80%, var(--color-bg-deep)); 
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+  
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.search-box input:focus {
+  border-color: var(--color-accent-blue);
+  box-shadow: 0 0 15px color-mix(in srgb, var(--color-accent-blue) 40%, transparent);
+}
+
+.search-box .search-icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-secondary); 
+}
+
+/* --- Icon Buttons (THEME FIX: Now has a proper frosted glass look) --- */
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  
+  /* Glass Button Background: Panel color + some transparency */
+  background: color-mix(in srgb, var(--color-panel-bg) 90%, transparent); 
+  border: 1px solid var(--color-border); /* Clearer border */
+  color: var(--color-text-primary); /* Icon color */
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--color-text-primary) 5%, transparent); /* Very subtle initial shadow */
+}
+
+.icon-btn:hover {
+  transform: scale(1.05); /* Slightly better animation */
+  /* Hover effect: Subtle accent blue mix and a clearer shadow */
+  background: color-mix(in srgb, var(--color-panel-bg) 70%, var(--color-accent-blue) 5%); 
+  box-shadow: 0 4px 15px color-mix(in srgb, var(--color-accent-blue) 15%, transparent);
+}
+
+/* --- User Info & Tooltip (Theme Compatible) --- */
+.user-info {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-tooltip {
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translateX(-50%);
+  min-width: 140px;
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  border-radius: 14px;
+  
+  /* Tooltip styling uses theme variables */
+  background: var(--color-panel-bg); 
+  backdrop-filter: blur(10px);
+  color: var(--color-text-primary); 
+  box-shadow: var(--color-shadow-primary);
+  
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  text-align: center;
+  margin-top: 5px; 
+}
+
+/* Show tooltip on hover */
+.user-info.group:hover .user-tooltip {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+  .top-panel {
+    flex-wrap: wrap;
+    padding: 0.75rem 1rem;
+  }
+  .right-controls {
+    max-width: 100%;
+    margin-top: 0.5rem;
+    justify-content: flex-end;
+  }
+}

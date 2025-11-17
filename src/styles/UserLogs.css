@@ -1,0 +1,270 @@
+/* =========================
+   UserLogs Container
+========================= */
+.userlogs-container {
+  font-family: 'Inter', sans-serif;
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-deep);
+  min-height: 100vh;
+  padding: 1.5rem;
+}
+
+/* =========================
+   Header + Search
+========================= */
+.userlogs-container h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.search-wrapper {
+    display: flex;
+  position: relative;
+  width: 100%;
+}
+
+.search-wrapper input {
+  width: 100%;
+  padding: 0.5rem 1rem 0.5rem 2.5rem;
+  border-radius: 0.75rem;
+  background: rgba(var(--color-text-primary-rgb), 0.05);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.search-wrapper input:focus {
+  border-color: var(--color-accent-blue);
+  box-shadow: 0 0 0 3px rgba(var(--color-accent-blue-rgb,112,176,255),0.3);
+}
+
+.search-wrapper svg {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-secondary);
+}
+
+/* =========================
+   Table Container
+========================= */
+.vision-table-container {
+  background-color: var(--color-panel-bg);
+  border-radius: 1rem;
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--color-shadow-primary);
+  margin-top: 1rem;
+  transition: all 0.3s ease;
+}
+
+/* Table Header */
+.vision-table-header {
+  display: grid;
+  grid-template-columns: 40px 1fr 1fr 1fr 1fr 1fr;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--color-text-primary);
+  background: rgba(var(--color-text-primary-rgb),0.05);
+  border-bottom: 2px solid var(--color-border);
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+}
+
+.vision-table-body {
+  display: flex;
+  flex-direction: column;
+}
+
+/* =========================
+   Table Rows
+========================= */
+.vision-table-row {
+  display: grid;
+  grid-template-columns: 40px 1fr 1fr 1fr 1fr 1fr;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  color: var(--color-text-primary);
+  border-bottom: 1px solid rgba(var(--color-text-primary-rgb),0.1);
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+  border-radius: 0.75rem;
+}
+
+.vision-table-row:hover {
+  background-color: rgba(var(--color-text-primary-rgb),0.05);
+  transform: translateY(-1px);
+}
+
+/* Expanded row with subtle glass effect */
+.vision-table-row.bg-gray-100 {
+  background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+/* Sub-rows (nested logs) */
+.vision-table-row.sub-row {
+  background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  padding-left: 3rem;
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.vision-table-row.sub-row:hover {
+  background-color: rgba(var(--color-text-primary-rgb),0.05);
+}
+
+/* =========================
+   Pagination
+========================= */
+.flex-gap-2 {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.vision-button.secondary {
+  background: rgba(var(--color-text-primary-rgb),0.05);
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  color: var(--color-text-primary);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.vision-button.secondary:hover:not(:disabled) {
+  background: rgba(var(--color-text-primary-rgb),0.1);
+  border-color: var(--color-accent-blue);
+}
+
+.vision-button.secondary:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* =========================
+   Scrollbar
+========================= */
+.vision-table-container::-webkit-scrollbar {
+  height: 6px;
+}
+
+.vision-table-container::-webkit-scrollbar-thumb {
+  background: rgba(var(--color-text-primary-rgb),0.2);
+  border-radius: 3px;
+}
+
+.vision-table-container::-webkit-scrollbar-track {
+  background: rgba(var(--color-text-primary-rgb),0.05);
+}
+
+/* =========================
+   Responsive Adjustments
+========================= */
+@media (max-width: 1024px) {
+  .vision-table-container {
+    overflow-x: scroll;
+  }
+}
+
+@media (max-width: 768px) {
+  .vision-table-header,
+  .vision-table-row {
+    grid-template-columns: 40px 2fr 2fr;
+  }
+
+  .vision-table-header div:nth-child(n+3),
+  .vision-table-row div:nth-child(n+3),
+  .vision-table-row.sub-row div:nth-child(n+3) {
+    display: none;
+  }
+}
+
+/* =========================
+   General Glass Effect
+========================= */
+.backdrop-blur-sm {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* =========================
+   Sub-rows Animation
+========================= */
+.sub-row-wrapper {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+}
+
+.sub-row-wrapper.expanded {
+  max-height: 1000px; /* large enough to show all sub-rows */
+}
+
+/* Sub-row indent & styling */
+.sub-row {
+  padding-left: 2rem;
+  font-size: 0.875rem;
+  opacity: 0.95;
+  background-color: rgba(var(--color-text-primary-rgb),0.03);
+  transition: background-color 0.2s ease, transform 0.3s ease;
+}
+
+.sub-row:hover {
+  background-color: rgba(var(--color-text-primary-rgb),0.06);
+  transform: translateY(-1px);
+}
+
+/* Arrow rotation */
+.rotate-180 {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease;
+}
+
+/* Expanded Row Pop Effect */
+.vision-table-row.bg-gray-100 {
+  transition: all 0.3s ease;
+}
+
+/* Smooth collapse/expand effect for subrows */
+.vision-table-body .vision-table-row {
+  transition: all 0.3s ease, opacity 0.3s ease;
+}
+
+/* =========================
+   Subrows Slide Animation
+========================= */
+.subrows-container {
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+.subrows-container > .vision-table-row {
+  transform: translateY(-5px);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.subrows-container.show {
+  max-height: 1000px;
+  opacity: 1;
+}
+
+.subrows-container.show > .vision-table-row {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+
+/* Flex layout for search + rows per page */
+/* Flex layout for search + rows per page */

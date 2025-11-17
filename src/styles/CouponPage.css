@@ -1,0 +1,230 @@
+/* ================================================================
+  COUPON MANAGEMENT PAGE - CLEAN, THEME-AWARE, MOBILE-RESPONSIVE
+================================================================ */
+
+/* --- Panel / Card --- */
+.vision-card {
+    background: var(--color-panel-bg);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--color-border);
+    border-radius: 1.5rem;
+    box-shadow: var(--color-shadow-primary);
+    padding: 1.5rem;
+    color: var(--color-text-primary);
+}
+
+/* --- Input Fields --- */
+.vision-input {
+    margin: 0.3rem;
+    background: rgba(var(--color-text-primary), 0.05);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    width: 100%;
+    transition: all 0.2s ease;
+    outline: none;
+}
+.vision-input:focus {
+    border-color: var(--color-accent-blue);
+    box-shadow: 0 0 0 3px rgba(var(--color-accent-blue-rgb, 112,176,255), 0.3);
+}
+.vision-input:disabled {
+    background: rgba(var(--color-text-secondary), 0.1);
+    color: var(--color-text-secondary);
+    cursor: not-allowed;
+}
+
+/* --- Add Coupon Button --- */
+.vision-btn-add-coupon {
+    background: var(--color-accent-blue);
+    color: #fff;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    text-align: center; /* Ensures text+icon centered on full-width button */
+}
+.vision-btn-add-coupon:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+}
+
+
+/* --- Save/Update Coupon Modal Button --- */
+.vision-btn-save-coupon {
+    background: var(--color-accent-blue);
+    color: #fff;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    width: 100%;
+    text-align: center;
+}
+.vision-btn-save-coupon:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+}
+
+
+
+/* --- Modal Overlay --- */
+.vision-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(6px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 50;
+    padding: 0 1rem; /* prevent modal going off-screen */
+    box-sizing: border-box;
+}
+
+/* --- Modal Content --- */
+.vision-modal {
+    background: var(--color-panel-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 1.5rem;
+    padding: 3rem;
+    width: 100%;
+    max-width: 480px;
+    color: var(--color-text-primary);
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    position: relative;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+/* --- Close Button --- */
+.vision-modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: var(--color-text-secondary);
+    transition: all 0.2s ease;
+}
+.vision-modal-close:hover {
+    color: var(--color-accent-blue);
+    transform: scale(1.2);
+}
+
+/* --- Vision Table --- */
+.vision-table-container {
+    overflow-x: auto;
+    border-radius: 1rem;
+    background: var(--color-panel-bg);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--color-shadow-primary);
+}
+.vision-table {
+    width: 100%;
+    min-width: 700px;
+}
+.vision-thead .vision-tr-head {
+    display: flex;
+    background: rgba(var(--color-text-primary), 0.05);
+    border-bottom: 2px solid var(--color-border);
+    font-weight: 600;
+    color: var(--color-text-secondary);
+}
+.vision-tr {
+    display: flex;
+    border-bottom: 1px solid var(--color-border);
+    transition: background-color 0.2s ease;
+}
+.vision-tr:hover {
+    background-color: rgba(var(--color-text-primary), 0.02);
+}
+.vision-th, .vision-td {
+    flex: 1;
+    padding: 1rem;
+    text-align: left;
+    color: var(--color-text-primary);
+}
+.vision-th:nth-child(1), .vision-td:nth-child(1) { flex: 1.5; } 
+.vision-th:nth-child(2), .vision-td:nth-child(2) { flex: 0.75; } 
+.vision-th:nth-child(3), .vision-td:nth-child(3) { flex: 1.25; } 
+.vision-th:nth-child(4), .vision-td:nth-child(4) { flex: 1.5; } 
+.vision-th:nth-child(5), .vision-td:nth-child(5) { flex: 1; text-align: right; }
+
+/* --- Action Buttons (Edit/Delete) --- */
+.vision-td button {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.75rem;
+    border: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+.vision-td button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+/* Edit Button */
+.text-indigo-400 {
+    background: rgba(0,122,255,0.05);
+    color: var(--color-accent-blue);
+}
+.text-indigo-400:hover { 
+    background: rgba(0, 122, 255, 0.15);
+}
+/* Delete Button */
+.text-red-400 {
+    background: rgba(255,59,48,0.05);
+    color: var(--color-error);
+}
+.text-red-400:hover { 
+    background: rgba(255, 59, 48, 0.15);
+}
+
+/* --- Utility Text Classes --- */
+.vision-text-primary { color: var(--color-text-primary); }
+.vision-text-secondary { color: var(--color-text-secondary); }
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+    .vision-modal {
+        padding: 1.5rem;
+        width: 100%;
+    }
+    .vision-table {
+        min-width: 100%;
+    }
+}
+/* Ensure action buttons stay in one row */
+
+/* Add consistent gap between Add Coupon button and table */
+.mt-6 {
+  margin-top: 1.5rem; /* Tailwind spacing unit */
+}
+
+
+.vision-td .flex.items-center {
+    display: flex;
+    flex-direction: row;
+}

@@ -1,0 +1,196 @@
+/* ================================================================
+   VisionOS + Tailwind Enhanced Referral System Styles
+   ---------------------------------------------------------------
+   Fully Responsive • Smooth UI • Glassmorphism • Vision Theme
+================================================================ */
+
+/* ----------------------------- */
+/* TABLE WRAPPER */
+/* ----------------------------- */
+
+.vision-table-container {
+    width: 100%;
+    overflow-x: auto;
+    backdrop-filter: blur(16px);
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 1rem;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow:
+        0px 4px 15px rgba(0,0,0,0.25),
+        inset 0px 0px 25px rgba(255,255,255,0.05);
+    padding: 0.25rem;
+}
+
+/* TABLE BODY */
+.vision-table {
+    min-width: 900px;
+    width: 100%;
+    border-collapse: separate;
+}
+
+/* ----------------------------- */
+/* TABLE ROWS */
+/* ----------------------------- */
+
+.vision-tr {
+    display: grid;
+    grid-template-columns: 40px minmax(160px, 1.4fr) repeat(4, minmax(110px, 1fr));
+    padding: 0.75rem 0.25rem;
+    align-items: center;
+    border-bottom: 1px solid var(--color-border);
+    transition: 0.25s ease;
+}
+
+.vision-tr:hover {
+    background-color: rgba(255,255,255,0.05);
+    transform: translateY(-1px);
+}
+
+/* LAST ROW */
+.vision-tr:last-child {
+    border-bottom: none;
+}
+
+/* ----------------------------- */
+/* TABLE HEADER */
+/* ----------------------------- */
+
+.vision-thead .vision-tr-head {
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(20px);
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    font-weight: 700;
+    font-size: 0.85rem;
+    border-bottom: 2px solid rgba(255,255,255,0.15);
+}
+
+.vision-th {
+    padding: 0.75rem 0.5rem;
+    color: var(--color-text-secondary);
+}
+
+.vision-th.text-right {
+    text-align: right;
+}
+
+/* ----------------------------- */
+/* BODY CELLS */
+/* ----------------------------- */
+
+.vision-td {
+    padding: 0.7rem 0.5rem;
+    color: var(--color-text-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.vision-td.text-right {
+    text-align: right;
+}
+
+/* ----------------------------- */
+/* PARENT ROW */
+/* ----------------------------- */
+
+.vision-tr.parent-row {
+    background-color: rgba(100, 180, 255, 0.14);
+    border-bottom: 2px solid rgba(100, 180, 255, 0.35);
+    font-weight: 700;
+}
+
+.vision-tr.parent-row:hover {
+    background-color: rgba(100, 180, 255, 0.20);
+}
+
+/* ----------------------------- */
+/* COLLAPSIBLE SUB ROW */
+/* ----------------------------- */
+
+.vision-tr.sub-row {
+    display: block;
+    background: rgba(255,255,255,0.04);
+    border-left: 3px solid rgba(100, 180, 255, 0.75);
+    margin-top: -2px;
+    padding: 0;
+    border-radius: 0 0 1rem 1rem;
+}
+
+/* Sub-table header */
+.sub-row-header {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    border-bottom: 1px dashed var(--color-border);
+}
+
+/* Sub-table rows */
+.sub-row-item {
+    display: grid;
+    grid-template-columns: 40px 1fr 90px 100px;
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.sub-row-item:last-child {
+    border-bottom: none;
+}
+
+/* ----------------------------- */
+/* COLLAPSE ICON */
+/* ----------------------------- */
+
+.collapse-icon {
+    background: none;
+    border: none;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    transition: 0.25s ease;
+}
+
+.collapse-icon:hover {
+    color: var(--color-accent-blue);
+    background: rgba(255,255,255,0.04);
+}
+
+/* ----------------------------- */
+/* RESPONSIVE DESIGN */
+/* ----------------------------- */
+
+/* Tablet */
+@media (max-width: 900px) {
+    .vision-tr {
+        grid-template-columns: 30px minmax(140px, 1.3fr) repeat(4, minmax(90px, 1fr));
+    }
+}
+
+/* Mobile WRAPPER */
+@media (max-width: 700px) {
+    .vision-table {
+        min-width: 700px;
+    }
+}
+
+/* Mobile SMALL */
+@media (max-width: 500px) {
+
+    .vision-table-container {
+        border-radius: 0.75rem;
+        padding: 0;
+    }
+
+    .vision-tr {
+        padding: 0.5rem 0.25rem;
+    }
+
+    .vision-th,
+    .vision-td {
+        font-size: 0.75rem;
+    }
+}

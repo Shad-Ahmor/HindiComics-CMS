@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Enhanced Apple gradient variables + smooth transitions */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Ensure smooth transitions on all elements */
+  transition: background 0.35s ease, color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
+}
+
+/* ===================================================================
+ * Light Mode (Default Theme) - All global variables defined here.
+ * =================================================================== */
+:root {
+  /* General Variables (from original index.css) */
+  --bg-gradient: linear-gradient(145deg,#ffffff 0%, #f6f7ff 20%, #eef1ff 45%, #e8f0ff 65%, #f4f6ff 100%);
+  --bg-primary: rgba(250,250,255,0.7);
+  --glass: rgba(255,255,255,0.45);
+  --shadow-soft: 0 15px 45px rgba(0,0,0,0.08);
+
+  /* Vision OS Variables (Now defined globally) */
+  --color-bg-deep: #f0f0f0; /* Page Background */
+  --color-panel-bg: rgba(255, 255, 255, 0.7); /* Panel/Glass Color */
+  --color-text-primary: #1c1c1e; /* Dark text */
+  --color-text-secondary: #6b7280; /* Secondary gray text */
+  --color-border: rgba(0, 0, 0, 0.1); /* Subtle dark border */
+  --color-shadow-primary: 0 10px 30px rgba(0, 0, 0, 0.08); /* Soft shadow */
+  
+  --color-accent-blue: #007aff; /* Apple Blue */
+  --color-error: #ff453a; /* Apple Red */
+
+  /* --- ADDED REQUIRED VARIABLES from Content.css for component functionality --- */
+  --color-background-elevated: #f9fafb; /* Needed for non-glass panels/modals */
+  --color-delete: #dc2626; /* Red-600 */
+  --color-joke: #34d399;   /* Emerald-400 */
+  --color-story: #f59e0b;  /* Amber-500 */
+  --color-shayri: #a78bfa; /* Violet-400 */
+  /* --------------------------------------------------------------------------- */
+}
+
+/* ===================================================================
+ * Dark Mode Overrides (when TopPanel sets data-theme="dark" or .dark)
+ * =================================================================== */
+[data-theme="dark"], .dark {
+  /* General Variables (from original index.css) */
+  --bg-gradient: linear-gradient(145deg,#05070d 0%, #0a0e18 20%, #0d1320 45%, #0a101d 70%, #06080f 100%);
+  --bg-primary: rgba(15,15,20,0.75);
+  --glass: rgba(40,40,40,0.55);
+  --shadow-soft: 0 20px 45px rgba(0,0,0,0.45);
+
+  /* Vision OS Variables (Now defined globally) */
+  --color-bg-deep: #0a0a1a; /* Deep dark page background */
+  --color-panel-bg: rgba(255, 255, 255, 0.05); /* Transparent white panel */
+  --color-text-primary: #f0f0f0; /* Light text */
+  --color-text-secondary: #a0a0b0; /* Lighter gray text */
+  --color-border: rgba(255, 255, 255, 0.1); /* Subtle light border */
+  --color-shadow-primary: 0 4px 60px rgba(0, 0, 0, 0.3); /* Deeper shadow */
+
+  /* --- ADDED REQUIRED VARIABLES from Content.css for component functionality --- */
+  --color-background-elevated: #1f2937; /* Gray-800 */
+  --color-delete: #b91c1c; /* Red-700 for dark mode delete button */
+  --color-joke: #10b981;   /* Emerald-500 */
+  --color-story: #f59e0b;  /* Amber-500 */
+  --color-shayri: #8b5cf6; /* Violet-500 */
+  /* --------------------------------------------------------------------------- */
+}
+
+
+body {
+  background: var(--bg-gradient);
+  background-attachment: fixed;
+  height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  color: var(--color-text-primary); /* Changed to use --color-text-primary for consistency */
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, sans-serif;
+  transition: background 0.5s ease, color 0.5s ease;
+}
+html, body { height: 100%; }
+
+/* Apple VisionOS Glass Surface: This is the critical shared style for all glass elements */
+.glass-card {
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  transition: all 0.3s ease;
+}
+
+/* Dark mode glass */
+html.dark .glass-card {
+  background: rgba(20, 20, 20, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}

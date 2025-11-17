@@ -1,0 +1,32 @@
+/* Glass/frosted effect for sidebar */
+aside {
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border-radius: 0 1.5rem 1.5rem 0;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+}
+
+aside nav a:hover {
+  transform: translateX(4px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+aside nav a.active {
+  background: rgba(255,255,255,0.25);
+  font-weight: 600;
+}
+
+/* Main content adjusts automatically */
+main {
+  margin-left: 18rem; /* width of sidebar */
+  transition: margin-left 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  aside {
+    width: 220px;
+  }
+  main {
+    margin-left: 220px !important;
+  }
+}
