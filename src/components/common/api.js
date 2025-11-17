@@ -1,8 +1,9 @@
 import axios from "axios";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // Configure axios instance
 const api = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: API_BASE_URL,
 });
 
 // Response interceptor
@@ -18,7 +19,7 @@ api.interceptors.response.use(
 
       try {
         await axios.post(
-          "http://localhost:5000/auth/logout",
+         `${API_BASE_URL}/auth/logout`,
           {},
           { headers: { Authorization: `Bearer ${token}` } }
         );

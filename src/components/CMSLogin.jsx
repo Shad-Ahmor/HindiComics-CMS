@@ -5,10 +5,11 @@ import { auth, signInWithEmailAndPassword } from "./firebase";
 
 import "../styles/Login.css";
 import "../styles/Sidebar.css";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export default function CMSLogin({ onLogin ,setUseruidRole}) {
-  const [email, setEmail] = useState("admin@hindicomics.com");
-  const [password, setPassword] = useState("password");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -44,7 +45,7 @@ export default function CMSLogin({ onLogin ,setUseruidRole}) {
 
     try {
       // Backend login
-      const response = await fetch("http://localhost:5000/auth/login", {
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
