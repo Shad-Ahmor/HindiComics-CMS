@@ -47,7 +47,7 @@ export default function AppRoutes({ user, setUser, theme }) {
   return (
     <Routes>
       {/* LOGIN ROUTE */}
-      <Route path="/login" element={<Login onLogin={setUser} setUseruidRole={setUseruidRole} />} />
+      <Route path="/" element={<Login onLogin={setUser} setUseruidRole={setUseruidRole} />} />
 
       {/* CMS LAYOUT with nested routes */}
       <Route path="/cms/*" element={<CMSLayout user={user} useruidrole={useruidrole} onLogout={handleLogout} theme={theme} initialMenu={initialMenu} />}>
