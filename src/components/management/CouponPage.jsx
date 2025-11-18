@@ -136,7 +136,7 @@ export default function CouponPage({ user, token }) {
     <div className="w-full p-4">
       {/* Header + Add Coupon Button */}
 {/* Header + Add Coupon Button */}
-<div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
+<div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4 mt-10vh">
   <h2 className="text-xl vision-text-primary font-semibold">
     Coupon Management
   </h2>

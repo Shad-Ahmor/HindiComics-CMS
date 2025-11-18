@@ -8,6 +8,7 @@
 
 .vision-container {
   padding: 1rem;
+  margin-top: 18vh !important;
   font-family: 'Inter', sans-serif;
   color: var(--color-text-primary);
   background-color: var(--color-bg-deep);

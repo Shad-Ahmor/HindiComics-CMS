@@ -8,6 +8,7 @@ import ReferralDashboard from "./marketting/Referal";
 import CouponPage from "./management/CouponPage";
 import UserLogs from "./management/UserLogs";
 import { can } from "./common/permissions";
+import CMSDashboard from "./CMSDashboard";
 
 // Map routes to sidebar menu names
 const pathToMenu = {
@@ -56,6 +57,8 @@ const [useruidrole, setUseruidrole] = useState(() => {
   // Conditionally render page based on permissions
   const renderPage = () => {
     switch (activeMenu) {
+              case "Dashboard":
+        return <CMSDashboard/> ;
       case "Comics":
         return <Comics user={user} userrole={role} token={token} uid={uid} /> ;
       case "Contents":
@@ -86,12 +89,10 @@ const [useruidrole, setUseruidrole] = useState(() => {
       <Sidebar user={user} activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
 
       {/* Main panel */}
-      <div className="maincontentpanel flex-1 transition-all duration-300 relative p-6">
-        <TopPanel user={user} onLogout={onLogout} theme={theme} />
-
-        {/* Render content based on permissions */}
-        {renderPage()}
-      </div>
+    <div className="maincontentpanel flex-1 transition-all duration-300 relative pt-24 p-6">
+  <TopPanel user={user} onLogout={onLogout} theme={theme} />
+  {renderPage()}
+</div>
     </div>
   );
 }

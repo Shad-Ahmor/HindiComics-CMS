@@ -91,9 +91,10 @@
   padding: 15px 18px;
   border-radius: 14px;
   background: var(--bg-secondary);
-  border: 1.4px solid transparent;
+  border: 1.4px solid ;
   font-size: 15px;
   color: var(--text-primary);
+  border-color:var(--color-border);
   margin-top: 16px;
   transition: 0.25s ease;
 }
