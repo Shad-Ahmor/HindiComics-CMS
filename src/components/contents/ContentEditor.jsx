@@ -59,8 +59,11 @@ useEffect(() => {
 setPostedBy(editingItem?.postedBy || userName);
 
 
-if (editingItem) {  
-  setSelectedId(editingItem.jokeId || editingItem.storyId || editingItem.shayriId);  
+if (editingItem && !openDialog) {
+    setOpenDialog(true);
+
+
+  setSelectedId(editingItem.jokeId || editingItem.storyId || editingItem.shayriId || editingItem.id || null);  
   setCategory(editingItem.category || "");  
 
   if (database === "stories") {  
@@ -77,9 +80,10 @@ if (editingItem) {
     setContent(editingItem.joke || "");  // backend me field 'joke' hai  
   }  
   setOpenDialog(true);  
-} else if (!openDialog) {  
-  resetForm();  
-}  
+} else if (!editingItem && !openDialog) {
+  resetForm();
+}
+
 
 
 }, [editingItem, database, userName, setEditingItem, openDialog]);

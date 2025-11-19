@@ -156,14 +156,7 @@
   transition: all 0.15s ease;
 }
 
-.vision-button-icon:hover {
-  background: color-mix(in srgb, var(--color-border) 80%, var(--color-text-primary) 15%);
-  transform: scale(1.05);
-}
 
-.vision-button-icon.delete:hover {
-  color: var(--color-error);
-}
 
 /* Page Number Button */
 .vision-button-page {
@@ -204,20 +197,28 @@
 }
 
 .table-header {
-  background-color: color-mix(in srgb, var(--color-panel-bg) 60%, var(--color-bg-deep) 40%);
+  display: grid;
+  grid-template-columns: 
+    1.5fr 1.2fr 1fr 2fr 0.8fr   /* main fields */
+    1fr 1fr 1fr;                /* media, approval, actions */
+  padding: 12px;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(20px);
+  border-radius: 10px;
+  margin-bottom: 8px;
   font-weight: 600;
-  border-bottom: 1px solid var(--color-border);
-  border-radius: 20px 20px 0 0;
-  color: var(--color-text-primary);
-  position: sticky;
-  top: 0;
-  z-index: 10;
 }
 
 .table-row {
-  font-size: 0.9rem;
-  border-bottom: 1px solid color-mix(in srgb, var(--color-border) 60%, transparent);
-  color: var(--color-text-primary);
+  display: grid;
+  grid-template-columns: 
+    1.5fr 1.2fr 1fr 2fr 0.8fr
+    1fr 1fr 1fr;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 6px;
+  border-radius: 12px;
+  transition: 0.25s ease;
 }
 
 .table-row:last-child {
@@ -225,25 +226,18 @@
 }
 
 .table-row:hover {
-  background-color: color-mix(in srgb, var(--color-panel-bg) 80%, var(--color-accent-blue) 5%); 
+  background: rgba(255,255,255,0.14);
+  transform: translateY(-2px);
 }
 
-.vision-badge {
-  padding: 4px 8px;
-  border-radius: 8px;
-  font-size: 0.75rem;
-  font-weight: 700;
+/* General cell styling */
+.table-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
 }
 
-.vision-badge.premium {
-  background-color: rgba(255, 215, 0, 0.2);
-  color: #ffd700;
-}
-
-.vision-badge.free {
-  background-color: rgba(0, 180, 255, 0.2);
-  color: #00b4ff;
-}
 
 /* -------------------------------------------------------------------
  * Loading / Empty State
@@ -295,7 +289,10 @@
    MODAL BOX (CLEAN WHITE)
 ====================== */
 .vision-modal-panel {
-  background: #ffffff;               /* PURE WHITE */
+  background: var(--color-bg-deep);  
+  border-color: var(--color-border);     
+  border-width: 2px;
+  border-style: solid;
   border-radius: 16px;
   padding: 25px;
   width: 100%;
@@ -342,14 +339,52 @@
 }
 
 /* Icons (Bold / New Line buttons) */
+/* ===========================================================
+   UPDATED ICON BUTTONS (Fixes: invisible icons, tiny icons,
+   table action icons, modal icons, VisionOS style)
+   =========================================================== */
+
 .vision-button-icon {
-  background: #ececec;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  border-radius: 10px;
   border: none;
-  padding: 10px 12px;
-  font-size: 18px;
-  border-radius: 8px;
   cursor: pointer;
+  font-size: 1.1rem;
+
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(10px);
+  transition: 0.2s ease;
 }
+
+
+.vision-button-icon:active {
+  transform: scale(0.95);
+}
+
+.vision-button-icon i,
+.vision-button-icon svg {
+  font-size: 20px !important;   /* FIX: icon always visible */
+  color: var(--color-text-primary);
+  opacity: 0.9;
+}
+
+/* Hover lift */
+.vision-button-icon:hover {
+  transform: translateY(-2px) scale(1.06);
+  background: color-mix(in srgb, var(--color-panel-bg) 70%, var(--color-accent-blue) 7%);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+}
+
+
+
+/* Approve: green tint */
+
+
 
 .vision-button-icon i {
   font-size: 18px;
@@ -358,11 +393,7 @@
 }
 
 /* Preview panel */
-.vision-panel {
-  background: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-}
+
 
 /* Actions */
 .modal-actions {
@@ -475,6 +506,147 @@
     border: 1px solid var(--color-accent-blue);
 }
 
+.vision-link {
+  color: var(--accent-color, #619af7);
+  cursor: pointer;
+  font-weight: 500;
+  border: none;
+  background: transparent;
+}
+
+.vision-link:hover {
+  text-decoration: underline;
+}
+
+
+
+/* ========== SPECIAL COLORS FOR DIFFERENT ACTIONS ========== */
+
+.vision-button-icon.view:hover {
+  box-shadow: 0 0 12px rgba(0, 150, 255, 0.6);
+}
+
+
+
+
+.vision-button-icon.approve:hover {
+  box-shadow: 0 0 12px rgba(0, 255, 120, 0.6);
+    background: rgba(0, 220, 80, 0.18);
+  color: #0bbf5e !important;
+}
+
+.vision-button-icon.reject:hover {
+    background: rgba(255, 180, 20, 0.18);
+  color: #ff9f0a !important;
+  box-shadow: 0 0 12px rgba(255, 80, 80, 0.6);
+}
+/* Reject: yellow/orange tint */
+
+.vision-button-icon.edit:hover {
+  box-shadow: 0 0 12px rgba(255, 200, 0, 0.6);
+}
+
+
+/* Delete: red hover */
+.vision-button-icon.delete:hover {
+  background: rgba(255, 50, 50, 0.15);
+  color: var(--color-error) !important;
+    box-shadow: 0 0 12px rgba(255, 0, 0, 0.6);
+
+}
+
+
+/* ========== BADGES FOR PREMIUM/FREE ========== */
+
+.vision-badge {
+  padding: 2px 10px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.vision-badge.premium {
+  background: rgba(255, 215, 0, 0.2);
+  color: #ffdd55;
+}
+
+.vision-badge.free {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+
+
+/* ========== MEDIA QUERIES FOR SMALL SCREENS ========== */
+
+@media (max-width: 1024px) {
+  .table-header,
+  .table-row {
+    grid-template-columns:
+      1.3fr 1.1fr 0.8fr 1.7fr 0.7fr
+      0.8fr 0.8fr 0.8fr;
+  }
+}
+
+
+
+@media (max-width: 640px) {
+  .table-header,
+  .table-row {
+    grid-template-columns:
+      1.2fr 1fr 0.7fr 0.7fr;
+  }
+
+  /* hide non-essential columns on mobile */
+  .table-cell:nth-child(3),
+  .table-cell:nth-child(4),
+  .table-cell:nth-child(5) {
+    display: none;
+  }
+}
+
+
+.action-buttons {
+  display: flex !important;
+  align-items: center;
+  gap: 8px !important;
+  justify-content: center;
+  min-width: 60px;      /* ensures emojis do NOT collapse */
+}
+
+/* Emoji icons should always be visible */
+.action-buttons .vision-button-icon {
+  font-size: 20px !important;     /* bigger and visible */
+  line-height: 20px !important;
+}
+
+
+.dropdown-wrapper {
+  position: relative;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.dropdown-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  color: #555;
+}
+
+.dropdown-select {
+  padding-left: 40px !important;
+  cursor: pointer;
+}
+
+.dropdown-select option {
+  padding: 10px;
+}
+
 /* -------------------------------------------------------------------
  * Responsive Adjustments (Mobile Optimization)
  * ------------------------------------------------------------------- */
@@ -523,11 +695,14 @@
   /* Table Adjustments for Mobile */
   .table-header, .table-row {
     /* Name, Filename/Premium, Actions */
-    grid-template-columns: 1fr 1fr 1fr; 
-    padding: 10px 15px;
+    grid-template-columns:
+      1.5fr 1fr 1fr 0.7fr
+      0.7fr 0.7fr 0.7fr;
+      padding: 10px 15px;
     font-size: 0.85rem;
   }
   .table-cell:nth-child(3), .table-cell:nth-child(4) { /* Date and Description hidden */
     display: none;
   }
 }
+

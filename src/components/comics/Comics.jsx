@@ -6,6 +6,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { decryptData } from "../../utils/encryption.jsx";
 import "../../styles/ComicsTheme.css"; // This will contain the actual Vision OS styles
+import { Database } from "lucide-react";
 
 const Comics = ({user,userrole,token,uid}) => {
   const [comics, setComics] = useState([]);
@@ -16,7 +17,25 @@ const Comics = ({user,userrole,token,uid}) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDatabase, setSelectedDatabase] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [expandedRows, setExpandedRows] = useState({});
+ const [categories, setCategories] = useState([ 
+    "HindiBooks",
+    "HindiComics",
+    "HindiDubbed",
+    "HinduBooks",
+    "IslamicBooks",
+    "Btech",
+"BA",
+"BCom",
+"Bsc",
+"HigherSecondary",
+"Intermediate",
+"MangaComics",
+"Medical",
+"PrimaryEducation",
+"SecondaryEducation"
+  ]); 
 
   const [newComic, setNewComic] = useState({
     name: "", Date: null, Discription: "", Premium: false, Tag: "",
@@ -31,14 +50,13 @@ const Comics = ({user,userrole,token,uid}) => {
 
 
 
-  useEffect(() => {
+
+
+useEffect(() => {
   if (!selectedDatabase) {
     setSelectedDatabase(defaultDatabases[0]);
     return;
   }
-
-  if (fetchRef.current) return; // already fetched
-  fetchRef.current = true;
 
   fetchComics();
 }, [selectedDatabase]);
@@ -76,64 +94,120 @@ const Comics = ({user,userrole,token,uid}) => {
       setLoading(false);
     }
   };
-
+const toggleExpand = (id) => {
+  setExpandedRows(prev => ({
+    ...prev,
+    [id]: !prev[id]
+  }));
+};
+  const handleDatabaseChange = (e) => {
+    setSelectedDatabase(e.target.value); // Update the selected database
+  };
+  
   const handleFormChange = e => {
     const { name, value, type, checked } = e.target;
     setNewComic(prev => ({ ...prev, [name]: type === "checkbox" ? checked : value }));
   };
 
-  const handleAddEditComic = async () => {
-    try {
-      if (!token) return navigate('/login');
-
-      const endpoint = isEditing ? `/comics/update/${newComic.id}` : `/comics/add`;
-      const payload = { ...newComic, database: selectedDatabase };
-
-      const response = await api.post(endpoint, payload, { headers: { Authorization: `Bearer ${token}` } });
-      if (response.status === 200) {
-        fetchComics();
-        setOpenForm(false);
-        setIsEditing(false);
-        setNewComic({
-          name: "", Date: null, Discription: "", Premium: false, Tag: "",
-          category: "", filename: "", fileurl: "", imageurl: "", imgurl: "", nov: 0, database: ""
-        });
-      }
-    } catch (err) {
-      console.error(err);
+    const handleViewPdf = (fileurl) => {
+    if (fileurl) {
+      const newfileurl = `https://drive.google.com/file/d/${fileurl}`; // Create the full URL
+      window.open(newfileurl, "_blank"); // Open in a new tab
     }
   };
+  
+  const handleViewImage = (imgurl) => {
+    if (imgurl) {
+      window.open(imgurl, "_blank"); // Open in a new tab
+    }
+  };
+const handleAddEditComic = async () => {
+  try {
+    if (!token) return navigate('/login');
+
+    const endpoint = isEditing
+      ? `/comics/${selectedDatabase}/${newComic.filename}`
+      : `/comics/${selectedDatabase}`;
+
+    const payload = { ...newComic };
+
+    const method = isEditing ? api.put : api.post;
+
+    const response = await method(endpoint, payload, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (response.status === 200 || response.status === 201) {
+      fetchComics();
+      setOpenForm(false);
+      setIsEditing(false);
+      setNewComic({
+        name: "", Date: null, Discription: "", Premium: false, Tag: "",
+        category: "", filename: "", fileurl: "", imageurl: "", imgurl: "", nov: 0
+      });
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 
   const handleEdit = comic => {
     setNewComic({ ...comic });
     setIsEditing(true);
     setOpenForm(true);
   };
+const handleDelete = async (id) => {
+  if (!window.confirm("Are you sure you want to delete this comic?")) return;
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this comic?")) return;
+  try {
+    if (!token) return navigate('/login');
 
-    try {
-      if (!token) return navigate('/login');
+    await api.delete(`/comics/${selectedDatabase}/${id}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
 
-      // Assuming you have a delete endpoint
-      await api.delete(`/comics/delete/${id}`, { 
-        headers: { Authorization: `Bearer ${token}` },
-        data: { database: selectedDatabase } 
-      });
+    fetchComics();
 
-      fetchComics();
-    } catch (err) {
-      console.error("Failed to delete comic:", err);
-    }
-  };
+  } catch (err) {
+    console.error("Failed to delete comic:", err);
+  }
+};
+
+const handleApprove = async (comic) => {
+  try {
+    await api.put(
+      `/comics/${selectedDatabase}/${comic.filename}`,
+      { ...comic, status: "approved" },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    fetchComics();
+  } catch (err) {
+    console.error("Approve error:", err);
+  }
+};
+
+const handleReject = async (comic) => {
+  try {
+    await api.put(
+      `/comics/${selectedDatabase}/${comic.filename}`,
+      { ...comic, status: "rejected" },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    fetchComics();
+  } catch (err) {
+    console.error("Reject error:", err);
+  }
+};
 
 
-  const filteredComics = comics.filter(c =>
-    c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    c.filename.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    c.Discription.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+
+
+const filteredComics = comics.filter(c =>
+  c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  c.filename.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  (c.Discription || "").toLowerCase().includes(searchQuery.toLowerCase())
+);
 
   const indexOfLast = currentPage * rowsPerPage;
   const indexOfFirst = indexOfLast - rowsPerPage;
@@ -164,56 +238,67 @@ const Comics = ({user,userrole,token,uid}) => {
       </div>
       
       {/* Controls Panel (Glassy) - FIX APPLIED HERE */}
-      <div className="vision-panel controls-panel grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-        {/* Search - Takes full width on small screens, 3/5 width on large screens */}
-        <input
-          className="vision-input sm:col-span-2 lg:col-span-3"
-          type="text"
-          placeholder="Search Name, Filename, or Description..."
-          value={searchQuery}
-          onChange={e => {
-            setSearchQuery(e.target.value);
-            setCurrentPage(1); // Reset to page 1 on new search
-          }}
-        />
-        {/* Database Selector - Shares row with RowsPerPage on small screens, 1/5 width on large screens */}
-        <select
-          className="vision-input lg:col-span-1"
-          value={selectedDatabase}
-          onChange={e => {
-            setSelectedDatabase(e.target.value);
-            setCurrentPage(1); // Reset to page 1 on DB change
-          }}
-        >
-          {defaultDatabases.map(db => <option key={db} value={db}>{db}</option>)}
-        </select>
-        {/* Rows Per Page Selector - Shares row with Database Selector on small screens, 1/5 width on large screens */}
-        <select
-          className="vision-input lg:col-span-1"
-          value={rowsPerPage}
-          onChange={(e) => { 
-            setRowsPerPage(Number(e.target.value)); 
-            setCurrentPage(1); // Reset to page 1 on rows change
-          }}
-        >
-          <option value="5">5 rows per page</option>
-          <option value="10">10 rows per page</option>
-          <option value="20">20 rows per page</option>
-          <option value="50">50 rows per page</option>
-          <option value="100">100 rows per page</option>
-        </select>
-      </div>
+      <div className="vision-panel controls-panel grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+
+  {/* Search */}
+  <input
+    className="vision-input col-span-2 lg:col-span-3"
+    type="text"
+    placeholder="Search Name, Filename, or Description..."
+    value={searchQuery}
+    onChange={e => {
+      setSearchQuery(e.target.value);
+      setCurrentPage(1);
+    }}
+  />
+
+  {/* Select Database */}
+  <select
+    className="vision-input col-span-1"
+    value={selectedDatabase}
+    onChange={e => {
+      setSelectedDatabase(e.target.value);
+      setCurrentPage(1);
+    }}
+  >
+    {defaultDatabases.map(db => (
+      <option key={db} value={db}>{db}</option>
+    ))}
+  </select>
+
+  {/* Rows per page */}
+  <select
+    className="vision-input col-span-1"
+    value={rowsPerPage}
+    onChange={(e) => {
+      setRowsPerPage(Number(e.target.value));
+      setCurrentPage(1);
+    }}
+  >
+    <option value="5">5 rows</option>
+    <option value="10">10 rows</option>
+    <option value="20">20 rows</option>
+    <option value="50">50 rows</option>
+    <option value="100">100 rows</option>
+  </select>
+
+</div>
+
 
       {/* Comics Table Panel (Glassy) */}
       <div className="vision-panel table-panel">
         <div className="table-header">
-          <span className="table-cell">Name</span>
-          <span className="table-cell">Filename</span>
-          <span className="table-cell hidden sm:inline">Date</span>
-          <span className="table-cell hidden md:inline">Description</span>
-          <span className="table-cell">Premium</span>
-          <span className="table-cell">Actions</span>
+            <span className="table-cell">Name</span>
+            <span className="table-cell">Filename</span>
+            <span className="table-cell hidden sm:inline">Date</span>
+            <span className="table-cell hidden md:inline">Description</span>
+            <span className="table-cell">Premium</span>
+
+            <span className="table-cell">Media</span>
+            <span className="table-cell">Approval</span>
+            <span className="table-cell">Actions</span>
         </div>
+
 
         {loading ? (
           <div className="vision-loading">
@@ -225,20 +310,110 @@ const Comics = ({user,userrole,token,uid}) => {
         ) : (
           currentComics.map(comic => (
             <div className="table-row" key={comic.id}>
-              <span className="table-cell font-medium">{comic.name}</span>
-              <span className="table-cell text-sm truncate">{comic.filename}</span>
-              <span className="table-cell hidden sm:inline text-xs">{comic.Date ? new Date(comic.Date).toLocaleDateString() : 'N/A'}</span>
-              <span className="table-cell hidden md:inline text-xs truncate max-w-xs">{comic.Discription}</span>
-              <span className="table-cell">
-                <span className={`vision-badge ${comic.Premium ? "premium" : "free"}`}>
-                  {comic.Premium ? "Premium" : "Free"}
-                </span>
-              </span>
-              <span className="table-cell action-buttons">
-                <button className="vision-button-icon edit" onClick={() => handleEdit(comic)}>✏️</button>
-                <button className="vision-button-icon delete" onClick={() => handleDelete(comic.id)}>🗑️</button>
-              </span>
-            </div>
+  <span className="table-cell font-medium">{comic.name}</span>
+  <span className="table-cell text-sm truncate">{comic.filename}</span>
+  <span className="table-cell hidden sm:inline text-xs">
+    {comic.Date ? new Date(comic.Date).toLocaleDateString() : 'N/A'}
+  </span>
+
+  {/* DESCRIPTION BLOCK (same as your code) */}
+  <span className="table-cell hidden md:inline text-xs max-w-xs">
+    {(() => {
+      const words = comic.Discription?.trim().split(" ") || [];
+      const isExpanded = expandedRows[comic.id];
+
+      if (words.length <= 5) return comic.Discription;
+
+      return isExpanded ? (
+        <>
+          {comic.Discription}
+          <button className="vision-link ml-2" onClick={() => toggleExpand(comic.id)}>▲</button>
+        </>
+      ) : (
+        <>
+          {words.slice(0, 5).join(" ")}...
+          <button className="vision-link ml-2" onClick={() => toggleExpand(comic.id)}>▼</button>
+        </>
+      );
+    })()}
+  </span>
+
+  {/* PREMIUM */}
+  <span className="table-cell">
+    <span className={`vision-badge ${comic.Premium ? "premium" : "free"}`}>
+      {comic.Premium ? "Premium" : "Free"}
+    </span>
+  </span>
+
+  {/* ------------------ COLUMN 1 : MEDIA ------------------ */}
+  <span className="table-cell action-buttons">
+    {comic.imageurl && (
+      <button
+        className="vision-button-icon view"
+                    onClick={() => handleViewImage(comic.imageurl)}
+
+        title="View Image"
+      >
+        🖼️
+      </button>
+    )}
+
+    {comic.fileurl && (
+      <button
+        className="vision-button-icon view"
+                    onClick={() => handleViewPdf(comic.fileurl)}
+
+        title="View PDF"
+      >
+        📄
+      </button>
+    )}
+  </span>
+
+  {/* ------------------ COLUMN 2 : APPROVAL ------------------ */}
+  <span className="table-cell action-buttons">
+    {userrole === "admin" && (
+      <>
+        <button
+          className="vision-button-icon approve"
+          onClick={() => handleApprove(comic)}
+          title="Approve"
+        >
+          ✅
+        </button>
+
+        <button
+          className="vision-button-icon reject"
+          onClick={() => handleReject(comic)}
+          title="Reject"
+        >
+          ❌
+        </button>
+      </>
+    )}
+  </span>
+
+  {/* ------------------ COLUMN 3 : EDIT + DELETE ------------------ */}
+  <span className="table-cell action-buttons">
+    <button
+      className="vision-button-icon edit"
+      onClick={() => handleEdit(comic)}
+      title="Edit"
+    >
+      ✏️
+    </button>
+
+    <button
+      className="vision-button-icon delete"
+      onClick={() => handleDelete(comic.id)}
+      title="Delete"
+    >
+      🗑️
+    </button>
+  </span>
+
+</div>
+
           ))
         )}
       </div>
@@ -285,36 +460,159 @@ const Comics = ({user,userrole,token,uid}) => {
       </div>
 
       {/* Add/Edit Comic Modal (Glassy Backdrop and Panel) */}
-      {openForm && (
-        <div className="vision-modal-backdrop">
-          <div className="vision-modal-panel">
-            <h2 className="vision-text-primary">{isEditing ? "Edit Comic" : "Add Comic"}</h2>
-            
-            <div className="modal-form-grid">
-              <input className="vision-input" name="name" value={newComic.name} onChange={handleFormChange} placeholder="Comic Name" />
-              <DatePicker
-                selected={newComic.Date ? new Date(newComic.Date) : null}
-                onChange={date => setNewComic(prev => ({ ...prev, Date: date }))}
-                className="vision-input"
-                dateFormat="yyyy-MM-dd"
-                placeholderText="Select Date"
-              />
-              <input className="vision-input" name="Tag" value={newComic.Tag} onChange={handleFormChange} placeholder="Tag (e.g., Action, Sci-Fi)" />
-              <textarea className="vision-textarea" name="Discription" value={newComic.Discription} onChange={handleFormChange} placeholder="Description (Max 255 chars)" maxLength="255" />
-            </div>
+{/* Add/Edit Comic Modal */}
+{openForm && (
+  <div className="vision-modal-backdrop">
+    <div className="vision-modal-panel xl">
+      <h2 className="vision-text-primary">{isEditing ? "Edit Comic" : "Add Comic"}</h2>
 
-            <label className="vision-checkbox-label">
-              <input type="checkbox" name="Premium" checked={newComic.Premium} onChange={handleFormChange} />
-              <span>Premium Content</span>
-            </label>
+      <div className="modal-form-grid">
 
-            <div className="modal-actions">
-              <button className="vision-button cancel" onClick={() => setOpenForm(false)}>Cancel</button>
-              <button className="vision-button primary" onClick={handleAddEditComic}>{isEditing ? "Update Comic" : "Add Comic"}</button>
-            </div>
-          </div>
-        </div>
-      )}
+<div className="dropdown-wrapper">
+  <Database className="dropdown-icon" />
+
+  <select
+    className="vision-input dropdown-select"
+    value={selectedDatabase}
+    onChange={handleDatabaseChange}
+  >
+    {defaultDatabases.map((db, index) => (
+      <option key={index} value={db}>
+        {db}
+      </option>
+    ))}
+  </select>
+</div>
+
+
+        {/* NAME */}
+        <input
+          className="vision-input"
+          name="name"
+          value={newComic.name}
+          onChange={handleFormChange}
+          placeholder="Comic Name"
+        />
+
+        {/* DATE */}
+        <DatePicker
+          selected={newComic.Date ? new Date(newComic.Date) : null}
+          onChange={(date) => setNewComic((p) => ({ ...p, Date: date }))}
+          className="vision-input"
+          dateFormat="yyyy-MM-dd"
+          placeholderText="Select Date"
+        />
+
+        {/* TAG */}
+        <input
+          className="vision-input"
+          name="Tag"
+          value={newComic.Tag}
+          onChange={handleFormChange}
+          placeholder="Tag (e.g., Action, Comedy)"
+        />
+
+        {/* CATEGORY */}
+        <select
+  className="vision-input"
+  name="category"
+  value={newComic.category}
+  onChange={handleFormChange}
+>
+  <option value="">Select Category</option>
+
+  {categories.map((cat, index) => (
+    <option key={index} value={cat}>
+      {cat}
+    </option>
+  ))}
+</select>
+
+
+
+        
+
+        {/* DESCRIPTION */}
+        <textarea
+          className="vision-textarea col-span-2"
+          name="Discription"
+          value={newComic.Discription}
+          onChange={handleFormChange}
+          placeholder="Description (Max 255 chars)"
+          maxLength={255}
+        />
+
+        {/* FILENAME */}
+        <input
+          className="vision-input"
+          name="filename"
+          value={newComic.filename}
+          onChange={handleFormChange}
+          placeholder="Filename (Auto or Manual)"
+        />
+
+    {/* FILE URL */}
+        <input
+          className="vision-input"
+          name="fileurl"
+          value={newComic.fileurl}
+          onChange={handleFormChange}
+          placeholder="File URL"
+        />
+
+    {/* IMAGE URL */}
+        <input
+          className="vision-input"
+          name="imageurl"
+          value={newComic.imageurl}
+          onChange={handleFormChange}
+          placeholder="Image URL (Main Cover)"
+        />
+
+    {/* IMG URL (Extra Thumbnail) */}
+        <input
+          className="vision-input"
+          name="imgurl"
+          value={newComic.imgurl}
+          onChange={handleFormChange}
+          placeholder="Thumbnail URL"
+        />
+
+    {/* NOV (No. of Views or Episodes) */}
+        <input
+          className="vision-input"
+          name="nov"
+          type="number"
+          value={newComic.nov}
+          onChange={handleFormChange}
+          placeholder="No. of Views / Episodes"
+        />
+
+      </div>
+
+      {/* PREMIUM CHECKBOX */}
+      <label className="vision-checkbox-label">
+        <input
+          type="checkbox"
+          name="Premium"
+          checked={newComic.Premium}
+          onChange={handleFormChange}
+        />
+        <span>Premium Content</span>
+      </label>
+
+      <div className="modal-actions">
+        <button className="vision-button cancel" onClick={() => setOpenForm(false)}>
+          Cancel
+        </button>
+        <button className="vision-button primary" onClick={handleAddEditComic}>
+          {isEditing ? "Update Comic" : "Add Comic"}
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
 
       {/* Bulk Upload Modal (Glassy Backdrop and Panel) */}
       {openBulkUpload && (

@@ -46,13 +46,16 @@ const fetchItems = async () => {
     setEditingItem(null);
   }, [token, database]);
 
-  const handleEdit = (item) => setEditingItem(item);
+const handleEdit = (item) => {
+  console.log("Editing:", item);
+  setEditingItem(item);
+};
 
   const handleDelete = async (item) => {
     if (!window.confirm("Are you sure you want to delete this item?")) return;
-    const id = item.jokeId || item.storyId || item.shayriId;
+    const id = item.jokeId || item.storyId || item.shayriId || item.id || null;
     try {
-      await api.delete(`${database}/${database}/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+      await api.delete(`content/${database}/${id}`, { headers: { Authorization: `Bearer ${token}` } });
       fetchItems();
     } catch (error) {
       console.error("Delete error:", error.response?.data || error.message);
