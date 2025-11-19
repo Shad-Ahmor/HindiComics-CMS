@@ -51,13 +51,10 @@
 .sidebarpanel::after {
   content: "";
   position: absolute;
-  width: 60%;
-  height: 15%;
   border-radius: 50%;
   /* Adaptive glossy streak: brighter in light mode, subtle in dark mode */
   background: linear-gradient(145deg, color-mix(in srgb, var(--color-text-primary) 40%, transparent), rgba(255,255,255,0));
   pointer-events: none;
-  opacity: 0.15; /* Subtler effect */
 }
 
 .sidebarpanel::before { top: 0; left: -10%; transform: rotate(-20deg); }

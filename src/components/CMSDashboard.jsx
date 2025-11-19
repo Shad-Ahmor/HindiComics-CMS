@@ -123,8 +123,10 @@ export default function CMSDashboard() {
   }));
 
   return (
-    <div className="dashboard-container">
-      <div className="sparkles-bg"></div>
+  <div className="vision-container">
+        <div className="card">
+          
+                <div className="sparkles-bg"></div>
       <h1 className="dashboard-header">CMS Dashboard</h1>
 
       <div className="dashboard-grid">{dashboardItems.map(cardWithMiniGraph)}</div>
@@ -221,6 +223,7 @@ export default function CMSDashboard() {
           </motion.div>
         </div>
       </div>
+    </div>
     </div>
   );
 }

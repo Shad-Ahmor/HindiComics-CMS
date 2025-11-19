@@ -1,21 +1,17 @@
 /* -------------------------------------------------------------------
  * Top Panel Styles (Using Global Theme Variables)
  * ------------------------------------------------------------------- */
-
 .top-panel {
-  position: fixed;      /* Fixed at top */
-  top: 4vh;               /* Top of viewport */
-  left: 20%;          /* Account for sidebar width */
-  right: 0;
-  z-index: 1000;        /* On top of other content */
+  position: sticky;       /* Sticky instead of fixed */
+  top: 0;                 /* Sticks to top of its container */
+  z-index: 100;           /* On top of content inside main panel */
   
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: calc(90% - 260px); /* Full width minus sidebar */
   padding: 1rem 1.5rem;
 
-  /* Theme Variables for Glass Panel Look */
+  /* Glass panel theme */
   background: var(--color-panel-bg);
   backdrop-filter: blur(15px);
   border-radius: 24px;
@@ -24,7 +20,18 @@
   color: var(--color-text-primary);
   transition: all 0.3s ease;
   overflow: hidden;
+  margin-bottom: 16px;    /* Space below TopPanel */
 }
+
+
+/* Adjust when sidebar is collapsed */
+.sidebarpanel.collapsed ~ .maincontentpanel .top-panel {
+left: 80px;            /* Collapsed sidebar width */
+}
+
+/* Mobile screens (sidebar overlays) */
+
+
 
 /* Adjust for collapsed sidebar */
 .sidebarpanel.collapsed ~ .maincontentpanel .top-panel {
@@ -147,6 +154,12 @@
   .top-panel {
     flex-wrap: wrap;
     padding: 0.75rem 1rem;
+    left: 0;
+right: 0;
+width: auto;
+border-radius: 0;
+padding: 0.75rem 1rem;
+
   }
   .right-controls {
     max-width: 100%;
@@ -154,3 +167,5 @@
     justify-content: flex-end;
   }
 }
+
+

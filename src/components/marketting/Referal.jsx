@@ -87,18 +87,16 @@ export default function Referal({token}) {
   }
 
   return (
-    <div className="vision-container">
-      
+        <div className="vision-container">
+        <div className="card">
       {/* 📊 User’s activity graph (Separate Panel) */}
-      <div className="vision-panel mb-6">
         <h2 className="text-xl font-semibold mb-4 flex items-center">
             <LucideBarChart3 className="lucide-icon mr-2 text-indigo-500" />
             My Recent Activity
         </h2>
         <UserActivityGraph userId={loggedInUser.uid} token={token} />
-      </div>
+    
 
-      <div className="vision-panel">
         <h2 className="text-xl font-semibold mb-4 flex items-center">
             <LucideTable className="lucide-icon mr-2 text-indigo-500" />
             Referral Network Overview
@@ -124,12 +122,7 @@ export default function Referal({token}) {
                     {/* Parent row: logged-in user */}
                     {loggedInUser.email ? (
                         <Row key={loggedInUser.uid} row={loggedInUser} isParent={true} />
-                    ) : (
-                        <div className="vision-tr">
-                            <div className="vision-td text-center" style={{ gridColumn: 'span 6 / span 6' }}>
-                                Logged-in user data is incomplete.
-                            </div>
-                        </div>
+                    ) : (""
                     )}
 
                     {/* Child rows: paginated referred users */}
@@ -188,16 +181,15 @@ export default function Referal({token}) {
             </div>
           </div>
         )}
-      </div>
       
       {/* 📝 Referred user activity logs (Separate Panel) */}
-      <div className="vision-panel mt-6">
         <h2 className="text-xl font-semibold mb-4 flex items-center">
             <LucideBarChart3 className="lucide-icon mr-2 text-indigo-500" />
             Referred User Activity Logs
         </h2>
         <ReferredUserLogs token={token}/>
-      </div>
+    </div>
+    
     </div>
   );
 }

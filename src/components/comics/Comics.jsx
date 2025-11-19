@@ -146,6 +146,7 @@ const Comics = ({user,userrole,token,uid}) => {
 
   return (
     <div className="vision-container">
+        <div className="card">
       {/* Header Panel (Glassy) */}
       <div className="vision-panel header-panel">
         <h1 className="vision-text-primary">Comics Management</h1>
@@ -342,6 +343,7 @@ const Comics = ({user,userrole,token,uid}) => {
           </div>
         </div>
       )}
+    </div>
     </div>
   );
 };

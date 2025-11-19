@@ -19,7 +19,8 @@
   --bg-primary: rgba(250,250,255,0.7);
   --glass: rgba(255,255,255,0.45);
   --shadow-soft: 0 15px 45px rgba(0,0,0,0.08);
-
+  --shadow-light: rgba(0, 0, 0, 0.15);
+  --shadow-dark: rgba(0, 0, 0, 0.35);
   /* Vision OS Variables (Now defined globally) */
   --color-bg-deep: #f0f0f0; /* Page Background */
   --color-panel-bg: rgba(255, 255, 255, 0.7); /* Panel/Glass Color */

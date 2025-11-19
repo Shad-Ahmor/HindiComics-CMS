@@ -133,8 +133,8 @@ export default function CouponPage({ user, token }) {
   ];
 
   return (
-    <div className="w-full p-4">
-      {/* Header + Add Coupon Button */}
+        <div className="vision-container">
+        <div className="card">
 {/* Header + Add Coupon Button */}
 <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4 mt-10vh">
   <h2 className="text-xl vision-text-primary font-semibold">
@@ -270,6 +270,7 @@ export default function CouponPage({ user, token }) {
   </div>
 )}
 
+    </div>
     </div>
   );
 }

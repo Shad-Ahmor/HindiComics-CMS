@@ -47,6 +47,9 @@
   background: var(--bg-primary);
 }
 
+.page-content .card {
+margin-top: 20px;
+}
 /* Topbar (optional inside main content) */
 .topbar {
   height: 65px;

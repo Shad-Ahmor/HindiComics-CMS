@@ -92,8 +92,10 @@ export default function UserLogs({token}) {
   const paginatedUsers = uniqueUsers.slice((currentPage-1)*rowsPerPage, currentPage*rowsPerPage);
 
   return (
-    <div className="userlogs-container p-4">
-      {/* Header */}
+    <div className="vision-container">
+        <div className="card">
+            
+            
       <div className="flex flex-col md:flex-row justify-between items-center mb-6">
         <h2 className="text-2xl font-semibold vision-text-primary">App Page Track</h2>
         <div className="search-wrapper mt-4 md:mt-0 w-full md:w-1/3 relative">
@@ -167,6 +169,7 @@ export default function UserLogs({token}) {
           <button className="vision-button secondary px-3 py-1" disabled={currentPage===totalPages||totalPages===0} onClick={()=>setCurrentPage(p=>p+1)}>Next</button>
         </div>
       </div>
+    </div>
     </div>
   );
 }

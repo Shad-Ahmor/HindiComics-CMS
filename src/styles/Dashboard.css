@@ -1,3 +1,17 @@
+body.light-mode .chart-card {
+  box-shadow: 0 10px 15px var(--shadow-light);
+}
+
+body.dark-mode .chart-card {
+  box-shadow: 0 10px 20px var(--shadow-dark);
+}
+body.light-mode .glow-line {
+  filter: drop-shadow(0 0 1px currentColor) drop-shadow(0 0 1px currentColor);
+}
+
+body.dark-mode .glow-line {
+  filter: drop-shadow(0 0 2px currentColor) drop-shadow(0 0 2px currentColor);
+}
 .dashboard-container {
   min-height: 100vh;
   top: 7vh;
@@ -76,7 +90,7 @@
 }
 
 .glow-line {
-  filter: drop-shadow(0 0 6px currentColor) drop-shadow(0 0 10px currentColor);
+  filter: drop-shadow(0 0 1px currentColor) drop-shadow(0 0 2px currentColor);
 }
 
 .analytics-section {
@@ -102,8 +116,9 @@
   padding: 1rem;
   border-radius: 2rem;
   background: var(--color-panel-bg);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(24px);
+    box-shadow: 0 10px 15px rgba(122, 121, 121, 0.15); 
+
+  backdrop-filter: blur(55px);
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
