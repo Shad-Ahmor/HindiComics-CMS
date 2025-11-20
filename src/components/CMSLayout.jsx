@@ -45,6 +45,7 @@ user={user}
 token={token || ""}
 uid={uid || ""}
 userrole={role || "user"}
+designation={useruidrole?.designation || ""}
 />
 );
 }

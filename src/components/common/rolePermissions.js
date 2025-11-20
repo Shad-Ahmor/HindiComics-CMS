@@ -51,10 +51,19 @@ export const rolePermissions = {
     "User Logs": { view: false },
     Suggestions: { view: false },
   },
-  writer: { // ✅ Only stories/jokes/shayari content
+  contentwriter: { // ✅ Only stories/jokes/shayari content
     Dashboard: { view: true },
     Comics: { view: false },
     Contents: { view: true, add: true, edit: true, delete: false },
+    Referrals: { view: false },
+    Coupons: { view: false },
+    "User Logs": { view: false },
+    Suggestions: { view: true }, // optional
+  },
+    comicswriter: { // ✅ Only stories/jokes/shayari content
+    Dashboard: { view: true },
+    Comics: { view: true, add: true, edit: true, delete: false  },
+    Contents: { view: false },
     Referrals: { view: false },
     Coupons: { view: false },
     "User Logs": { view: false },

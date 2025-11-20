@@ -41,6 +41,10 @@
               0 0 10px rgba(0, 70, 255, 0.05);
   transition: all 0.3s ease;
 }
+.vision-panel.table-panel {
+  overflow-x: auto; /* horizontal scroll */
+  padding: 0;
+}
 
 .header-panel {
   display: flex;
@@ -184,45 +188,64 @@
  * Table
  * ------------------------------------------------------------------- */
 
+/* Wrap table in a scrollable container */
 .table-panel {
-  padding: 0; /* Remove padding from the panel itself, rows provide padding */
+  padding: 0;
+  overflow-x: auto; /* horizontal scroll */
 }
 
-.table-header, .table-row {
+/* Grid container for both header and body */
+
+
+.table-grid {
   display: grid;
-  grid-template-columns: 2fr 2fr 1.5fr 3fr 1fr 2fr;
+  grid-auto-flow: column;
+  min-width: max-content; /* prevents shrinking */
+  gap: 0;
+  align-items: center;
+}
+/* Inner table wrapper to prevent wrapping */
+.table-header,
+.table-row {
+  display: grid;
+  grid-auto-flow: column; /* ensures all columns stay in one row */
+  min-width: max-content; /* prevents columns from shrinking below content */
+  gap: 0; /* optional */
+    grid-template-columns: 2fr 2fr 1.5fr 3fr 1fr 2fr;
   align-items: center;
   padding: 14px 25px;
   transition: background-color 0.2s ease;
 }
 
+/* Optional: hide scrollbar for cleaner look */
+.table-panel::-webkit-scrollbar {
+  height: 6px;
+}
+.table-panel::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.2);
+  border-radius: 3px;
+}
+
+
+
 .table-header {
-  display: grid;
   grid-template-columns: 
-    1.5fr 1.2fr 1fr 2fr 0.8fr   /* main fields */
-    1fr 1fr 1fr;                /* media, approval, actions */
-  padding: 12px;
+    1.5fr 1.5fr 1fr 3fr 1fr 1fr 1fr 1fr 1fr;
+  padding: 12px 16px;
   background: rgba(255,255,255,0.12);
   backdrop-filter: blur(20px);
   border-radius: 10px;
-  margin-bottom: 8px;
   font-weight: 600;
 }
 
+/* Row styling */
 .table-row {
-  display: grid;
   grid-template-columns: 
-    1.5fr 1.2fr 1fr 2fr 0.8fr
-    1fr 1fr 1fr;
-  align-items: center;
-  padding: 10px;
+    1.5fr 1.5fr 1fr 3fr 1fr 1fr 1fr 1fr 1fr;
+  padding: 10px 16px;
   margin-bottom: 6px;
   border-radius: 12px;
-  transition: 0.25s ease;
-}
-
-.table-row:last-child {
-  border-bottom: none;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 .table-row:hover {
@@ -230,14 +253,26 @@
   transform: translateY(-2px);
 }
 
-/* General cell styling */
+/* Cells */
 .table-cell {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   font-size: 0.9rem;
+  white-space: nowrap; /* prevent breaking */
 }
 
+.table-row:last-child {
+  border-bottom: none;
+}
+
+.vision-panel::-webkit-scrollbar {
+  height: 6px;
+}
+.vision-panel::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.2);
+  border-radius: 3px;
+}
 
 /* -------------------------------------------------------------------
  * Loading / Empty State
@@ -646,21 +681,28 @@
 .dropdown-select option {
   padding: 10px;
 }
+.vision-badge.rejected {
+  background-color: #f87171; /* light red */
+  color: #fff;
+}
+
 
 /* -------------------------------------------------------------------
  * Responsive Adjustments (Mobile Optimization)
  * ------------------------------------------------------------------- */
-
 @media (max-width: 1024px) {
-  /* Tablet/Small Desktop: Hide Description column */
   .table-header, .table-row {
-    grid-template-columns: 2fr 2fr 1fr 2fr; 
+    grid-template-columns: 1.5fr 1.5fr 1fr 2fr 1fr 1fr 1fr;
   }
-  .table-cell:nth-child(4) { /* Description column */
-    display: none;
-  }
+  .table-cell:nth-child(4) { display: none; } /* hide Description */
 }
 
+@media (max-width: 768px) {
+  .table-header, .table-row {
+    grid-template-columns: 1.5fr 1fr 1fr 0.7fr 0.7fr 0.7fr;
+  }
+  .table-cell:nth-child(3), .table-cell:nth-child(4) { display: none; } /* hide Date+Description */
+}
 @media (max-width: 768px) {
   /* Mobile: Stack header buttons and hide more table columns */
   
@@ -692,17 +734,5 @@
     grid-template-columns: 1fr; /* Stack modal inputs vertically */
   }
 
-  /* Table Adjustments for Mobile */
-  .table-header, .table-row {
-    /* Name, Filename/Premium, Actions */
-    grid-template-columns:
-      1.5fr 1fr 1fr 0.7fr
-      0.7fr 0.7fr 0.7fr;
-      padding: 10px 15px;
-    font-size: 0.85rem;
-  }
-  .table-cell:nth-child(3), .table-cell:nth-child(4) { /* Date and Description hidden */
-    display: none;
-  }
 }
 

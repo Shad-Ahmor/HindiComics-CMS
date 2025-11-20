@@ -63,6 +63,7 @@ export default function CMSLogin({ onLogin ,setUseruidRole}) {
       const userRoleData = {
         uid: data.user.uid,
         role: data.user.role,
+        designation: data.user.designation,
         name: cleanedFirstName,
         subrole: data.user.subrole,
         courses: data.user.courses,

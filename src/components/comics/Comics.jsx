@@ -8,7 +8,7 @@ import { decryptData } from "../../utils/encryption.jsx";
 import "../../styles/ComicsTheme.css"; // This will contain the actual Vision OS styles
 import { Database } from "lucide-react";
 
-const Comics = ({user,userrole,token,uid}) => {
+const Comics = ({user,userrole,designation,token,uid}) => {
   const [comics, setComics] = useState([]);
   const [loading, setLoading] = useState(true);
   const [openForm, setOpenForm] = useState(false);
@@ -45,7 +45,11 @@ const Comics = ({user,userrole,token,uid}) => {
   const navigate = useNavigate();
   const demoDatabases = ["ComicsDemo", "EducationDemo", "ReligiousDemo"];
   const liveDatabases = ["Comics", "Education", "Religious"];
-  const defaultDatabases = userrole === "admin" ? [...demoDatabases, ...liveDatabases] : demoDatabases;
+  const defaultDatabases =
+  userrole === "admin"
+    ? [...demoDatabases, ...liveDatabases]
+    : demoDatabases; 
+
   const fetchRef = useRef(false);
 
 
@@ -75,6 +79,7 @@ useEffect(() => {
         {
           database: selectedDatabase,
           role: userrole,
+          designation:designation,
           userId: uid,
         },
         { headers: { Authorization: `Bearer ${token}` } }
@@ -173,12 +178,11 @@ const handleDelete = async (id) => {
     console.error("Failed to delete comic:", err);
   }
 };
-
 const handleApprove = async (comic) => {
   try {
-    await api.put(
-      `/comics/${selectedDatabase}/${comic.filename}`,
-      { ...comic, status: "approved" },
+    await api.post(
+      `/comics/moderate/${selectedDatabase}/${comic.filename}`,
+      { status: "approved" },
       { headers: { Authorization: `Bearer ${token}` } }
     );
     fetchComics();
@@ -186,12 +190,11 @@ const handleApprove = async (comic) => {
     console.error("Approve error:", err);
   }
 };
-
 const handleReject = async (comic) => {
   try {
-    await api.put(
-      `/comics/${selectedDatabase}/${comic.filename}`,
-      { ...comic, status: "rejected" },
+    await api.post(
+      `/comics/moderate/${selectedDatabase}/${comic.filename}`,
+      { status: "rejected" },
       { headers: { Authorization: `Bearer ${token}` } }
     );
     fetchComics();
@@ -286,137 +289,121 @@ const filteredComics = comics.filter(c =>
 
 
       {/* Comics Table Panel (Glassy) */}
-      <div className="vision-panel table-panel">
-        <div className="table-header">
-            <span className="table-cell">Name</span>
-            <span className="table-cell">Filename</span>
-            <span className="table-cell hidden sm:inline">Date</span>
-            <span className="table-cell hidden md:inline">Description</span>
-            <span className="table-cell">Premium</span>
+<div className="vision-panel table-panel">
+  <div className="table-grid table-header">
+    <span className="table-cell">Name</span>
+    <span className="table-cell">Filename</span>
+    <span className="table-cell">Date</span>
+    <span className="table-cell">Description</span>
+    <span className="table-cell">Premium</span>
+    <span className="table-cell">Status</span>
+    <span className="table-cell">Media</span>
+    <span className="table-cell">Approval</span>
+    <span className="table-cell">Actions</span>
+  </div>
 
-            <span className="table-cell">Media</span>
-            <span className="table-cell">Approval</span>
-            <span className="table-cell">Actions</span>
-        </div>
+  {loading ? (
+    <div className="vision-loading">
+      <div className="vision-spinner"></div>
+      Loading Comics from **{selectedDatabase}**...
+    </div>
+  ) : filteredComics.length === 0 ? (
+    <div className="vision-empty-state">No comics found for the current search/database.</div>
+  ) : (
+    currentComics.map(comic => (
+      <div className="table-row" key={comic.id}>
+        <span className="table-cell font-medium">{comic.name || "N/A"}</span>
+        <span className="table-cell text-sm truncate">{comic.filename || "N/A"}</span>
+        <span className="table-cell text-xs">{comic.Date ? new Date(comic.Date).toLocaleDateString() : "N/A"}</span>
+        <span className="table-cell text-xs max-w-xs">
+          {(() => {
+            const words = comic.Discription?.trim().split(" ") || [];
+            const isExpanded = expandedRows[comic.id];
+            if (!comic.Discription) return "N/A";
+            if (words.length <= 5) return comic.Discription;
+            return isExpanded ? (
+              <>
+                {comic.Discription}
+                <button className="vision-link ml-2" onClick={() => toggleExpand(comic.id)}>▲</button>
+              </>
+            ) : (
+              <>
+                {words.slice(0, 5).join(" ")}...
+                <button className="vision-link ml-2" onClick={() => toggleExpand(comic.id)}>▼</button>
+              </>
+            );
+          })()}
+        </span>
+        <span className="table-cell">
+          <span className={`vision-badge ${comic.Premium ? "premium" : "free"}`}>
+            {comic.Premium !== undefined ? (comic.Premium ? "Premium" : "Free") : "N/A"}
+          </span>
+        </span>
 
-
-        {loading ? (
-          <div className="vision-loading">
-            <div className="vision-spinner"></div>
-            Loading Comics from **{selectedDatabase}**...
-          </div>
-        ) : filteredComics.length === 0 ? (
-          <div className="vision-empty-state">No comics found for the current search/database.</div>
-        ) : (
-          currentComics.map(comic => (
-            <div className="table-row" key={comic.id}>
-  <span className="table-cell font-medium">{comic.name}</span>
-  <span className="table-cell text-sm truncate">{comic.filename}</span>
-  <span className="table-cell hidden sm:inline text-xs">
-    {comic.Date ? new Date(comic.Date).toLocaleDateString() : 'N/A'}
+<span className="table-cell">
+  <span
+    className={`vision-badge ${
+      comic.approved === true
+        ? "approved"
+        : comic.approved === false
+        ? "rejected"
+        : "free"
+    }`}
+  >
+    {comic.approved === true
+      ? "Approved"
+      : comic.approved === false
+      ? "Rejected"
+      : "N/A"}
   </span>
+</span>
 
-  {/* DESCRIPTION BLOCK (same as your code) */}
-  <span className="table-cell hidden md:inline text-xs max-w-xs">
-    {(() => {
-      const words = comic.Discription?.trim().split(" ") || [];
-      const isExpanded = expandedRows[comic.id];
 
-      if (words.length <= 5) return comic.Discription;
+        <span className="table-cell action-buttons">
+          {comic.imageurl ? (
+            <button className="vision-button-icon view" onClick={() => handleViewImage(comic.imageurl)}>🖼️</button>
+          ) : "N/A"}
+          {comic.fileurl ? (
+            <button className="vision-button-icon view" onClick={() => handleViewPdf(comic.fileurl)}>📄</button>
+          ) : "N/A"}
+        </span>
 
-      return isExpanded ? (
-        <>
-          {comic.Discription}
-          <button className="vision-link ml-2" onClick={() => toggleExpand(comic.id)}>▲</button>
-        </>
-      ) : (
-        <>
-          {words.slice(0, 5).join(" ")}...
-          <button className="vision-link ml-2" onClick={() => toggleExpand(comic.id)}>▼</button>
-        </>
-      );
-    })()}
-  </span>
-
-  {/* PREMIUM */}
-  <span className="table-cell">
-    <span className={`vision-badge ${comic.Premium ? "premium" : "free"}`}>
-      {comic.Premium ? "Premium" : "Free"}
-    </span>
-  </span>
-
-  {/* ------------------ COLUMN 1 : MEDIA ------------------ */}
-  <span className="table-cell action-buttons">
-    {comic.imageurl && (
-      <button
-        className="vision-button-icon view"
-                    onClick={() => handleViewImage(comic.imageurl)}
-
-        title="View Image"
-      >
-        🖼️
-      </button>
-    )}
-
-    {comic.fileurl && (
-      <button
-        className="vision-button-icon view"
-                    onClick={() => handleViewPdf(comic.fileurl)}
-
-        title="View PDF"
-      >
-        📄
-      </button>
-    )}
-  </span>
-
-  {/* ------------------ COLUMN 2 : APPROVAL ------------------ */}
-  <span className="table-cell action-buttons">
-    {userrole === "admin" && (
-      <>
+<span className="table-cell action-buttons">
+  {userrole === "admin" || userrole === "manager" ? (
+    <>
+      {/* Show Approve button only if not already approved */}
+      {comic.approved !== true && (
         <button
           className="vision-button-icon approve"
           onClick={() => handleApprove(comic)}
-          title="Approve"
         >
           ✅
         </button>
+      )}
 
+      {/* Show Reject button only if not already rejected */}
+      {comic.approved !== false && (
         <button
           className="vision-button-icon reject"
           onClick={() => handleReject(comic)}
-          title="Reject"
         >
           ❌
         </button>
-      </>
-    )}
-  </span>
+      )}
+    </>
+  ) : null}
+</span>
 
-  {/* ------------------ COLUMN 3 : EDIT + DELETE ------------------ */}
-  <span className="table-cell action-buttons">
-    <button
-      className="vision-button-icon edit"
-      onClick={() => handleEdit(comic)}
-      title="Edit"
-    >
-      ✏️
-    </button>
 
-    <button
-      className="vision-button-icon delete"
-      onClick={() => handleDelete(comic.id)}
-      title="Delete"
-    >
-      🗑️
-    </button>
-  </span>
 
-</div>
-
-          ))
-        )}
+        <span className="table-cell action-buttons">
+          <button className="vision-button-icon edit" onClick={() => handleEdit(comic)}>✏️</button>
+          <button className="vision-button-icon delete" onClick={() => handleDelete(comic.id)}>🗑️</button>
+        </span>
       </div>
+    ))
+  )}
+</div>
 
       {/* Pagination Panel (Glassy) */}
       <div className="vision-panel pagination-panel">
@@ -475,6 +462,7 @@ const filteredComics = comics.filter(c =>
     className="vision-input dropdown-select"
     value={selectedDatabase}
     onChange={handleDatabaseChange}
+    
   >
     {defaultDatabases.map((db, index) => (
       <option key={index} value={db}>
@@ -492,6 +480,7 @@ const filteredComics = comics.filter(c =>
           value={newComic.name}
           onChange={handleFormChange}
           placeholder="Comic Name"
+           readOnly={isEditing}
         />
 
         {/* DATE */}
@@ -549,6 +538,7 @@ const filteredComics = comics.filter(c =>
           value={newComic.filename}
           onChange={handleFormChange}
           placeholder="Filename (Auto or Manual)"
+           readOnly={isEditing}
         />
 
     {/* FILE URL */}
